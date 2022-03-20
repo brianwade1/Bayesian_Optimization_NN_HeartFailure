@@ -96,7 +96,7 @@ def record_results(model, method_name, x_sets, y_sets, NN_model = False, save_pr
 ## Logistic Regression
 ######################
 # make logistic regression model
-logReg_model = LogisticRegression(random_state = RANDOM_STATE, max_iter = 800)
+logReg_model = LogisticRegression(random_state = RANDOM_STATE, max_iter = 5000)
 logReg_model.fit(x_train, y_train)
 
 # save model results
@@ -127,8 +127,8 @@ loss = 'binary_crossentropy'
 metrics=['accuracy']
 
 # Architecture Hyperparameters:
-InputLayer = 15
-HL1 = 10
+InputLayer = 25
+HL1 = 15
 HL2 = 5
 
 # Neural nets need to scaled data - fit to train, apply to val and test.

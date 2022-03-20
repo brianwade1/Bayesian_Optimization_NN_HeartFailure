@@ -15,13 +15,16 @@ RANDOM_STATE = 42
 data_path = os.path.join('Data', 'heart_cleaned.csv')
 df = pd.read_csv(data_path)
 
+# Drop high VIF columns (see EDA analysis)
+df_2 = df.drop(columns=['RestingBP', 'Age'])
+
 # Separate data and target
-target = df['HeartDisease']
-data = df.copy().drop('HeartDisease', axis = 1)
+target = df_2['HeartDisease']
+data = df_2.copy().drop('HeartDisease', axis = 1)
 col_names = data.columns[1:]
 
 # make logistic regression model
-logReg_model = LogisticRegression(random_state = RANDOM_STATE)
+logReg_model = LogisticRegression(random_state = RANDOM_STATE, max_iter = 5000)
 logReg_model.fit(data, target)
 
 y_hat = logReg_model.predict(data)
