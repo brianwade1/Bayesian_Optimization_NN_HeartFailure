@@ -1,6 +1,6 @@
-# Exploratory Data Analysis (EDA) and Predictive Modeling for Heart Failure
+# Bayesian Optimization of Neural Net Model for Predictive Modeling for Heart Failure
 
-This project predicts the likelihood for heart failure. The project takes place in two parts: exploratory data analysis (EDA) and data preparation, and the creation of three binary classification models. Hyperparameters of the random forest and neural net are not optimized at this stage in the project. 
+This project predicts the likelihood for heart failure. The project takes place in three parts: exploratory data analysis (EDA) and data preparation, the creation of three initial binary classification models including logistic regression, random forests, and a neural network. Then, the hyperparameters of the neural net were optimized using Bayesian Optimization. 
 
 ---
 
@@ -10,22 +10,42 @@ This repo contains the following folders and files:
 
 Folders:
 
+* [Config](Config) : configuration file (.ini file) to specify the hyperparameters for the neural net trained in [Model_Development.py](Model_Development.py) and the hyperparameters for the Bayesian Optimization [BayesianOpt_main](BayesianOpt_main.py)
+ 
+
 * [Data](Data) : Raw data and description
   * heart_raw.csv - Raw data from [kaggle website](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction?select=heart.csv)
+
   * heart_cleaned.csv - transformed data exported at the end of the [EDA.ipynb](EDA.ipynb) file.
 
 * [Images](Images): Images produced from the [EDA.ipynb](EDA.ipynb) and [Feature_Importance.py](Feature_Importance.py) file. These imaged are used in this readme file.
 
 * [Models](Models): Saved trained models created in [Model_Development.py](Model_Development.py) file
 
-* [Results](Results): Results of the trained models created in [Model_Development.py](Model_Development.py) file
+* [Results](Results): Results of the trained models created in [Model_Development.py](Model_Development.py) and [BayesianOpt_main](BayesianOpt_main.py) files.
+
+* [Tools](Tools): Supporting Scripts for the [Model_Development.py](Model_Development.py) and[BayesianOpt_main](BayesianOpt_main.py) files.
+
+* [BayesianOpt.py](BayesianOpt.py) - Bayesian Optimization class which is called by the [BayesianOpt_main](BayesianOpt_main.py)
+
+* [Evaluate_model.py](Evaluate_model.py) - function script which calculates the accuracy and area under the ROC curve (AUC) for the train, validation, and test data sets. It also saves the evaluation results to a csv file. 
+
+* [Get_and_prepare_data.py](Get_and_prepare_data.py) - function script which reads the data csv file, divides the data into a train, validation, and test sets, and scales the data for modeling in the neural nets. 
+
+* [get_configuration.py](get_configuration.py) - function script which reads and stores the settings in the [NN_BayesianOpt_config.ini](NN_BayesianOpt_config.ini) file.
+
+* [Neural_Net_Model.py](Neural_Net_Model.py) - fully connected feed forward neural network class which contains methods to make network architecture, train, save, load, and evaluate the model.
  
 
-Files:
+Main Files:
+* [BayesianOpt_main.py](BayesianOpt_main.py) - Main script to conduct a Bayesian Optimization of the hyperparameters for the neural net classifier.
 
 * [EDA.ipynb](EDA.ipynb) - Exploratory Data Analysis and data preparation.
+
 * [Feature_Importance.py](Feature_Importance.py) - Logistic regression model to explore influence of each feature (main effects only) and how each predictor feature changes the odds ratio of heart failure.
+
 * [Model_Development.py](Model_Development.py) - development and evaluation of three independent prediction models: logistic regression, random forest classifier, and neural net classifier.
+
 * [environment.yml](environment.yml) and [requirements.txt](requirements.txt)- python dependencies to recreate the virtual environment from [conda](https://docs.conda.io/en/latest/) or [pip](https://pypi.org/project/pip/).
 
 ---
@@ -127,9 +147,9 @@ An imbalance in the target class can cause issues with classifiers and the use o
 
 ---
 
-## Predictive Modeling
+## Initial Modeling
 
-In this work, three separate predictive models were tested: logistic regression, random forest, and neural networks. Before modeling, the data was split into a train, validation, and test set which was 80%, 10%, and 10% of the full dataset respectively. All models were trained on the training set and evaluated on the validation and test sets. The logistic regression and random forest were trained on unscaled data. For the neural network, the data was scaled with a standard scaler (scale each feature to a mean of 0 and 1 standard deviation) which was fit to the training set and applied to teh validation and test sets.
+Three initial predictive models were tested: logistic regression, random forest, and neural networks. Before modeling, the data was split into a train, validation, and test set which was 80%, 10%, and 10% of the full dataset respectively. All models were trained on the training set and evaluated on the validation and test sets. The logistic regression and random forest were trained on unscaled data. For the neural network, the data was scaled with a standard scaler (scale each feature to a mean of 0 and 1 standard deviation) which was fit to the training set and applied to teh validation and test sets.
 
 ### Logistic Regression
 
@@ -157,7 +177,7 @@ Training Hyperparameters
 
 ---
 
-## Results
+## Initial Results
 
 The results of the fitting process are shown below.
 
@@ -180,7 +200,44 @@ The results of the fitting process are shown below.
 | Accuracy | 0.8859  | 0.8267 | 0.9067 | 
 | AUC | 0.9534 | 0.9331 | 0.9806 |
 
-In this example, the random forest was the best performing model followed very closely by the neural network. This analysis did not optimize the hyperparameters of either model and both models would likely see increased performance with either a hyperparameter search (grid or random) or an optimization method such a Bayesian optimization of the hyperparameter.
+In this example, the random forest was the best performing model followed very closely by the neural network. 
+
+---
+## Bayesian Optimization of Neural Network Hyperparameter Results
+
+The results of the optimization of the neural network hyperparamters are show below for 150 optimization iterations.
+
+![Bayesian_Optimization_Convergence_Plot](/Images/Bayesian_Optimization_Convergence_Plot.png)
+
+The best parameters for the neural network were:
+
+| Parameter | Value |
+| ------ | --------- |
+| learning rate | 0.0098 |
+| Number of Hidden Layers | 2 |
+| Layer1 Nodes | 18 |
+| Layer2 Nodes | 18 |
+| Batch Size | 31 |
+| Training Function | adam |
+| learnign rate decay rate| 0.5607 |
+| learning rate scheduler | linear_lr_dec |
+
+These resulted in the below neural net
+
+![NN_model](/Images/NN_model.png)
+
+The hyperparamters interaction chart shows how changes in the hyperparameters effect the accuracy.
+
+![Bayesian_Optimization_Objective_Plot](/Images/Bayesian_Optimization_Objective_Plot.png)
+
+After optimization, the best neural net model produced the following results. These were close to the random forest results but generally not much better.
+### **Neural Net**
+| Metric | Train Set| Validation Set | Test Set |
+| ------ | --------- | --------- | --------- |
+| Accuracy | 0.8860  | 0.9054 | 0.8816 | 
+| AUC | 0.9641 | 0.9496 | 0.9783 |
+
+
 
 
 ---
