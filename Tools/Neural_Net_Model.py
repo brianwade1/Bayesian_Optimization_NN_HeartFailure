@@ -54,7 +54,6 @@ class NN_Model:
         self.model.add(Dense(self.output_dim, activation = 'sigmoid'))
         
         # Compile the network 
-        #optimizer1 = keras.optimizers.Adam(lr = self.config.learning_rate)
         if self.config.train_fun == 'adam':
             optimizer = keras.optimizers.Adam(learning_rate = self.config.learning_rate)
         else:

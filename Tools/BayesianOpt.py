@@ -46,9 +46,6 @@ from Tools.Evaluate_model import calculate_results, record_results, save_model
 from Tools.Neural_Net_Model import NN_Model
 
 
-#config_file = 'sat_maneuver_config.ini'
-#model_name = 'best_model'
-
 RESULTS_FILENAME = os.path.join('Results', 'BayesianOpt_Model_results.csv')
 
 
@@ -262,13 +259,12 @@ class BayesianTuning:
         # Delete the Keras model with these hyper-parameters from memory.
         del nn_model
         
-        # # Clear the Keras session
+        # Clear the Keras session
         keras.backend.clear_session()
         tf.compat.v1.reset_default_graph()
         gc.collect()
-
-        #del nn_model
     
+        # move onto next iteration
         self.iteration += 1
         
         return eval_metric
