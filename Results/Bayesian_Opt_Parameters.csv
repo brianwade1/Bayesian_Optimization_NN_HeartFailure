@@ -1,0 +1,10 @@
+learning_rate=0.009760133700134644
+num_hiddenlayers=2
+num_Layer1_nodes=18
+num_Layer2_nodes=18
+num_Layer3_nodes=8
+batch_size=31
+training_function=adam
+lr_decay=0.5607871510823191
+decays_during_training=15
+learning_rate_scheduler=linear_lr_dec

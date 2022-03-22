@@ -9,11 +9,18 @@ import joblib
 
 
 
-def clear_previous_results():
+def clear_all_previous_results():
     # Remove previous results
     files = glob.glob('Results/*')
     for f in files:
         os.remove(f)
+
+
+def clear_previous_result(file_name):
+    # Remove previous results file
+    file_path = os.path.join('Results', file_name)
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
 
 # Record results function

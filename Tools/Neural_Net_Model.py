@@ -26,6 +26,7 @@ from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, LearningRateScheduler, TerminateOnNaN, History
 from tensorflow.keras.utils import plot_model
 
+
 class NN_Model:
     def __init__(self, config, input_dim, output_dim):
         self.config = config
@@ -173,6 +174,6 @@ class NN_Model:
 
     def save_model_summary(self):
         ''' Print model summary to file '''
-        with open(os.path.join(self.config.current_dir, 'Models', 'modelsummary.txt'),'w+') as f:
+        with open(os.path.join(self.config.current_dir, 'Results', 'modelsummary.txt'),'w+') as f:
             self.model.summary(print_fn = lambda x: f.write(x + '\n'))
 

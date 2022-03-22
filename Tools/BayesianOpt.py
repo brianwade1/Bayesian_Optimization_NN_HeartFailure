@@ -42,12 +42,14 @@ import gc
 
 # Functions in other scripts of this repo
 from Tools.Get_and_prepare_data import get_and_prepare_data, createScaler_and_scale_data
-from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_results
+from Tools.Evaluate_model import calculate_results, record_results, save_model
 from Tools.Neural_Net_Model import NN_Model
 
 
-config_file = 'sat_maneuver_config.ini'
-model_name = 'best_model'
+#config_file = 'sat_maneuver_config.ini'
+#model_name = 'best_model'
+
+RESULTS_FILENAME = os.path.join('Results', 'BayesianOpt_Model_results.csv')
 
 
 class light_weight_CheckpointSaver:
@@ -115,7 +117,7 @@ class BayesianTuning:
         self.best_config = None
         self.best_model = None
         self.check_point_file = 'gp_min_checkpoint.txt'
-        self.checkpoint_path = os.path.join(self.config.current_dir, 'Models', self.check_point_file)
+        self.checkpoint_path = os.path.join(self.config.current_dir, 'Results', self.check_point_file)
 
         self.input_dim = self.x_data['train'].shape[1]
         self.output_dim = 1 #binary classifier
@@ -253,6 +255,9 @@ class BayesianTuning:
             self.best_model = nn_model
             self.best_config = self.config
 
+            # save results
+            record_results('BayesianOpt_NN', accuracy, auc, RESULTS_FILENAME)
+
         ## Clean Up
         # Delete the Keras model with these hyper-parameters from memory.
         del nn_model
@@ -330,7 +335,7 @@ class BayesianTuning:
         for i, parameter in enumerate(self.dimension_labels):
             self.best_set[parameter] = self.gp_result.x[i]
             
-        with open(os.path.join(self.config.current_dir, 'Models', 'Bayesian_Opt_Parameters.csv'), 'w') as NN_parameter_file:
+        with open(os.path.join(self.config.current_dir, 'Results', 'Bayesian_Opt_Parameters.csv'), 'w') as NN_parameter_file:
             writer = csv.writer(NN_parameter_file, delimiter = '=')
             for name, value in self.best_set.items():
                 writer.writerow([name, value])

@@ -22,7 +22,7 @@ import joblib
 
 # Functions in other scripts of this repo
 from Tools.Get_and_prepare_data import get_and_prepare_data, createScaler_and_scale_data
-from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_results
+from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_result
 
 
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     RESULTS_FILENAME = os.path.join('Results', 'model_development_results.csv')
     DATA_FILE = 'heart_cleaned.csv'
 
-    clear_previous_results()
+    clear_previous_result(RESULTS_FILENAME)
     x_sets, y_sets, col_names = get_and_prepare_data(data_file = DATA_FILE, train_size = TRAIN_SIZE, val_size = VAL_SIZE, random_state = RANDOM_STATE)
 
     ######################
@@ -111,10 +111,12 @@ if __name__ == "__main__":
     ######################
     # Neural Net - New framework
     ######################
+    NN_Name = 'Random_Forest'
+
     # Functions in other scripts of this repo
     from Tools.get_configuration import ConfigurationParameters
     from Tools.Get_and_prepare_data import get_and_prepare_data, createScaler_and_scale_data
-    from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_results
+    from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_result
     from Tools.Neural_Net_Model import NN_Model
     import random
 
@@ -140,8 +142,8 @@ if __name__ == "__main__":
     nn_model = NN_Model(config, input_dim, output_dim)
     nn_model.make_model()  
     nn_model.train_model(x_sets_scaled, y_sets, 'Neural_Net_newFW')
-    accuracy, auc, y_hat, predProb = nn_model.evaluate_model(x_sets_scaled, y_sets)
-
-    print(accuracy)
+    NN_accuracy, NN_auc, NN_y_hat, NN_predProb = nn_model.evaluate_model(x_sets_scaled, y_sets)
+    #save_predicted_results(rf_name, rf_y_hat, rf_predProb)
+    record_results(NN_Name, NN_accuracy, NN_auc, RESULTS_FILENAME)
 
   

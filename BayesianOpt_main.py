@@ -21,7 +21,7 @@ import warnings
 # Functions in other scripts of this repo
 from Tools.get_configuration import ConfigurationParameters
 from Tools.Get_and_prepare_data import get_and_prepare_data, createScaler_and_scale_data
-from Tools.Evaluate_model import calculate_results, record_results, save_model, clear_previous_results
+from Tools.Evaluate_model import calculate_results, record_results, save_model
 from Tools.BayesianOpt import BayesianTuning
 
 

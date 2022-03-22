@@ -1,0 +1,30 @@
+--Logistic_Regression--
+Accuracy
+train = 0.8355704697986577
+validation = 0.8108108108108109
+test = 0.8947368421052632
+AUC
+train = 0.9189932437785046
+validation = 0.9013878743608473
+test = 0.9621848739495799
+
+--Random_Forest--
+Accuracy
+train = 1.0
+validation = 0.8918918918918919
+test = 0.9210526315789473
+AUC
+train = 1.0
+validation = 0.9360847333820307
+test = 0.9880952380952381
+
+--Random_Forest--
+Accuracy
+train = 0.8875838926174496
+validation = 0.8243243243243243
+test = 0.9342105263157895
+AUC
+train = 0.9547661351470638
+validation = 0.9444850255661067
+test = 0.9838935574229691
+
